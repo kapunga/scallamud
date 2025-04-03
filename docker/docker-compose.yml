@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  scallamud-server:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: scallamud-server:0.1.0
+    container_name: scallamud-server
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    environment:
+      - JAVA_OPTS=-Xms256m -Xmx512m
