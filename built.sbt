@@ -25,7 +25,8 @@ lazy val root = (project in file(".")).
     core.js,
     core.jvm,
     core.native,
-    server)
+    server,
+    client)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
@@ -41,6 +42,14 @@ lazy val server = (project in file("server"))
   .settings(
     commonSettings,
     name := "scallamud-server",
+    startYear := Some(2025),
+    libraryDependencies ++= Libraries.cats ++ Libraries.fs2 ++ Libraries.http4s
+  ).dependsOn(core.jvm)
+
+lazy val client = (project in file("client"))
+  .settings(
+    commonSettings,
+    name := "scallamud-client",
     startYear := Some(2025),
     libraryDependencies ++= Libraries.cats ++ Libraries.fs2 ++ Libraries.http4s
   ).dependsOn(core.jvm)
