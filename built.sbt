@@ -38,11 +38,17 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   )
 
 lazy val server = (project in file("server"))
+  .enablePlugins(JavaAppPackaging, DockerPlugin)
   .settings(
     commonSettings,
     name := "scallamud-server",
     startYear := Some(2025),
-    libraryDependencies ++= Libraries.cats ++ Libraries.fs2 ++ Libraries.http4s
+    libraryDependencies ++= Libraries.cats ++ Libraries.fs2 ++ Libraries.http4s,
+    Docker / packageName := "scallamud-server",
+    Docker / version := "0.1.0",
+    Docker / maintainer := "Paul (Thor) Thordarson <kapunga@gmail.com>",
+    Docker / dockerExposedPorts := Seq(8080),
+    Docker / dockerBaseImage := "eclipse-temurin:17-jre-alpine"
   ).dependsOn(core.jvm)
 
 addCommandAlias(
