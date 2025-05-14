@@ -35,7 +35,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     commonSettings,
     name := "scallamud-core",
     startYear := Some(2025),
-    libraryDependencies ++= Libraries.fallatol ++ Libraries.terminus 
+    libraryDependencies ++= Libraries.cats ++ Libraries.circe ++ Libraries.http4s ++ Libraries.fallatol ++ Libraries.terminus ++ Libraries.munit
   )
 
 lazy val server = (project in file("server"))

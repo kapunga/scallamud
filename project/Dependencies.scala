@@ -2,11 +2,13 @@ import sbt.*
 
 object Dependencies {
   object V {
-    val cats = "2.10.0"
-    val catsEffect = "3.6.0-RC2"
+    val cats = "2.13.0"
+    val catsEffect = "3.7-4972921"
+    val circe = "0.14.13"
     val fallatol = "0.3.1"
-    val fs2 = "3.9.3"
-    val http4s = "0.23.25"
+    val fs2 = "3.12.0"
+    val http4s = "0.23.30"
+    val munit = "1.1.1"
     val terminus = "0.4.0"
   }
 
@@ -14,6 +16,12 @@ object Dependencies {
     val cats: Seq[ModuleID] = Seq(
       "org.typelevel" %% "cats-core" % V.cats,
       "org.typelevel" %% "cats-effect" % V.catsEffect
+    )
+
+    val circe: Seq[ModuleID] = Seq(
+      "io.circe" %% "circe-core" % V.circe,
+      "io.circe" %% "circe-generic" % V.circe,
+      "io.circe" %% "circe-parser" % V.circe
     )
 
     val fallatol: Seq[ModuleID] =
@@ -28,6 +36,10 @@ object Dependencies {
       "org.http4s" %% "http4s-dsl" % V.http4s,
       "org.http4s" %% "http4s-ember-server" % V.http4s,
       "org.http4s" %% "http4s-ember-client" % V.http4s
+    )
+    
+    val munit: Seq[ModuleID] = Seq(
+      "org.scalameta" %% "munit" % V.munit % Test
     )
     
     val terminus: Seq[ModuleID] =
