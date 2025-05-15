@@ -1,8 +1,8 @@
 package slm.protocol
 
-import io.circe.{Codec, Decoder, Encoder}
 import io.circe.Codec.AsObject.derivedConfigured
 import io.circe.derivation.Configuration
+import io.circe.{ Codec, Decoder, Encoder }
 import org.http4s.Uri
 
 enum Entry:
@@ -22,18 +22,19 @@ object Entry:
   given Codec[Entry.InfoPage] = derivedConfigured[Entry.InfoPage]
   given Codec[Entry.Tty] = derivedConfigured[Entry.Tty]
   given Codec[Entry.Gateway] = derivedConfigured[Entry.Gateway]
-  
+
   // Entry codec for recursive references
   given Codec[Entry] = Codec.from(
     Decoder.instance { c =>
-      c.as[Entry.InfoPage].map(identity)
+      c.as[Entry.InfoPage]
+        .map(identity)
         .orElse(c.as[Entry.Tty].map(identity))
         .orElse(c.as[Entry.Gateway].map(identity))
     },
     Encoder.instance {
       case ip: Entry.InfoPage => Encoder[Entry.InfoPage].apply(ip)
-      case tty: Entry.Tty => Encoder[Entry.Tty].apply(tty)
-      case gw: Entry.Gateway => Encoder[Entry.Gateway].apply(gw)
+      case tty: Entry.Tty     => Encoder[Entry.Tty].apply(tty)
+      case gw: Entry.Gateway  => Encoder[Entry.Gateway].apply(gw)
     }
   )
 
@@ -45,7 +46,7 @@ object AuthMethod:
     Decoder.decodeString.emap { str =>
       AuthMethod.values.find(_.value == str) match
         case Some(method) => Right(method)
-        case None => Left(s"Invalid auth method: $str")
+        case None         => Left(s"Invalid auth method: $str")
     },
     Encoder.encodeString.contramap[AuthMethod](_.value)
   )
