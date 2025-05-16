@@ -21,22 +21,28 @@
 
 package slm.server
 
-import cats.effect.{ IO, IOApp }
-import com.comcast.ip4s._
-import org.http4s.HttpRoutes
-import org.http4s.dsl.io._
+import cats.effect.{IO, IOApp}
+import com.comcast.ip4s.*
+import org.http4s.{ EntityEncoder, HttpRoutes }
+import org.http4s.circe.jsonEncoderOf
+import org.http4s.dsl.io.*
 import org.http4s.ember.server.EmberServerBuilder
-import org.http4s.implicits._
+import org.http4s.implicits.*
+import org.http4s.circe.CirceEntityEncoder.*
+import slm.protocol.Entry
 
 /** Main server class for ScallaMUD.
   *
   * This class implements a simple HTTP server using http4s and cats-effect.
   */
 object ScallaMudServer extends IOApp.Simple:
+  given EntityEncoder[IO, Entry] = jsonEncoderOf[IO, Entry]
 
+  val directory = Entry.Gateway("foo", List.empty)
+  
   val routes = HttpRoutes
     .of[IO] {
-      case GET -> Root            => Ok("Welcome to ScallaMUD!")
+      case GET -> Root            => Ok(directory)
       case GET -> Root / "status" => Ok("Server is running")
     }
     .orNotFound

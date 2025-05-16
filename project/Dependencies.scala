@@ -33,6 +33,7 @@ object Dependencies {
     )
     
     val http4s: Seq[ModuleID] = Seq(
+      "org.http4s" %% "http4s-circe" % V.http4s,
       "org.http4s" %% "http4s-dsl" % V.http4s,
       "org.http4s" %% "http4s-ember-server" % V.http4s,
       "org.http4s" %% "http4s-ember-client" % V.http4s

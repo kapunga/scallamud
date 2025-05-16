@@ -51,7 +51,6 @@ lazy val server = (project in file("server"))
     Docker / version := "0.1.0",
     Docker / maintainer := "Paul (Thor) Thordarson <kapunga@gmail.com>",
     Docker / dockerExposedPorts := Seq(8080),
-    Docker / dockerBaseImage := "eclipse-temurin:17-jre-alpine"
   ).dependsOn(core.jvm)
 
 lazy val client = (project in file("client"))
