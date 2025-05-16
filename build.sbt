@@ -1,4 +1,6 @@
 import Dependencies.Libraries
+import sbtassembly.MergeStrategy
+import sbtassembly.PathList
 
 val commonSettings = Seq(
   scalaVersion := "3.3.5",
@@ -53,14 +55,32 @@ lazy val server = (project in file("server"))
   ).dependsOn(core.jvm)
 
 lazy val client = (project in file("client"))
+  .enablePlugins(AssemblyPlugin)
   .settings(
     commonSettings,
     name := "scallamud-client",
     startYear := Some(2025),
-    libraryDependencies ++= Libraries.cats ++ Libraries.fs2 ++ Libraries.http4s
+    libraryDependencies ++= Libraries.cats ++ Libraries.fs2 ++ Libraries.http4s,
+    assembly / mainClass := Some("slm.client.ScallaMudClient"),
+    assembly / assemblyJarName := "scallamud-client.jar",
+    // Merge strategy to handle duplicate files during assembly
+    assembly / assemblyMergeStrategy := {
+      case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+      case "module-info.class" => MergeStrategy.discard
+      case x if x.endsWith(".properties") => MergeStrategy.first
+      case x if x.endsWith(".conf") => MergeStrategy.concat
+      case x => 
+        val oldStrategy = (assembly / assemblyMergeStrategy).value
+        oldStrategy(x)
+    }
   ).dependsOn(core.jvm)
 
 addCommandAlias(
   "formatAll",
   "+scalafmtAll; +scalafixAll; +headerCreateAll"
+)
+
+addCommandAlias(
+  "buildClient",
+  "client/assembly"
 )
