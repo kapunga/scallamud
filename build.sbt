@@ -84,3 +84,8 @@ addCommandAlias(
   "buildClient",
   "client/assembly"
 )
+
+addCommandAlias(
+  "buildServer",
+  "server/Universal/stage"
+)
